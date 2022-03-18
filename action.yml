@@ -1,0 +1,62 @@
+name: "UmbHost Web Deploy"
+description: "Deploy projects directly to UmbHost"
+inputs:
+  website-name:
+    description: "IIS website name"
+    required: true
+  server-computer-name:
+    description: "IIS server computer name"
+    required: true
+  server-username:
+    description: "IIS server username"
+    required: true
+  server-password:
+    description: "IIS server password"
+    required: true
+  source-path:
+    description: "The source directory for payload"
+    required: false
+    default: '_build'
+  source-paramFile:
+    description: "The location of the SetParameters.xml file"
+    required: false
+    default: '""'
+  source-fileName:
+    description: "The name of the file to be deployed"
+    required: true
+    default: 'Umbraco.Web.zip'
+runs:
+  using: "composite"
+  steps:
+    - name: Stop Application Pool
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        StopAppPool
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+    - name: Deploy Application
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
+        ${{ inputs.source-path }}
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+        ${{ inputs.source-paramFile }}
+        ${{ inputs.source-fileName }}
+    - name: Start Application Pool
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        StartAppPool
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+branding:
+  icon: "upload-cloud"
+  color: "purple"
