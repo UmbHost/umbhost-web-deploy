@@ -58,5 +58,5 @@ runs:
         ${{ inputs.server-username }}
         ${{ inputs.server-password }}
 branding:
-  icon: "upload-cloud"
-  color: "purple"
+  icon: 'server'
+  color: 'blue'
