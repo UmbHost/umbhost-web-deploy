@@ -9,7 +9,7 @@ This action utilizes Microsoft’s own `Web Deploy 3.0+` executable, which you c
 Place the following in your action `/.github/workflows/main.yml`
 ```yml
       - name: Deploy to UmbHost
-        uses: UmbHost/umbhost-web-deploy-composite-action@1.0.0
+        uses: UmbHost/umbhost-web-deploy@1.0.0
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
@@ -96,7 +96,7 @@ jobs:
             msbuild.exe ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
             
         - name: Deploy to UmbHost
-          uses: UmbHost/umbhost-web-deploy-composite-action@1.0.0
+          uses: UmbHost/umbhost-web-deploy@1.0.0
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
