@@ -19,8 +19,8 @@ inputs:
     default: '_build'
   source-paramFile:
     description: "The location of the SetParameters.xml file"
-    required: false
-    default: 'nofileset'
+    required: true
+    default: '""'
   source-fileName:
     description: "The name of the file to be deployed"
     required: true

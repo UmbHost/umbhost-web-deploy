@@ -28,7 +28,7 @@ param
  "-setParam:'IIS Web Application Name'='${recycleApp}'",
  "-enableRule:DoNotDeleteRule"
 
- if ($paramFile -ne "nofileset"){
+ if ($paramFile){
     $arguments += "-setParamFile:${contentPath}\${paramFile}"
  }
  
