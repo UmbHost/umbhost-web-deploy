@@ -129,8 +129,6 @@ jobs:
     steps:
         - name: Checkout
           uses: actions/checkout@v3.0.0
-          with:
-            submodules: 'true'
 
         - name: Create Build Directory
           run: mkdir _build
@@ -142,10 +140,10 @@ jobs:
         - name: Deploy to UmbHost
           uses: UmbHost/umbhost-web-deploy@v1.0.1
           with:
-            website-name: ${{ secrets.RELEASE_WEBSITE_NAME }}
-            server-computer-name: ${{ secrets.RELEASE_SERVER_COMPUTER_NAME }}
-            server-username: ${{ secrets.RELEASE_USERNAME }}
-            server-password: ${{ secrets.RELEASE_PASSWORD }}
+            website-name: ${{ secrets.WEBSITE_NAME }}
+            server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
+            server-username: ${{ secrets.USERNAME }}
+            server-password: ${{ secrets.PASSWORD }}
             source-path: '_build'
             source-fileName: Umbraco.Web.zip
 ```
