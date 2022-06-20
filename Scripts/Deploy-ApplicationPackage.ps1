@@ -1,13 +1,16 @@
 
  $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";
 
- $source = $args[0]
- $recycleApp = $args[1]
- $computerName = $args[2]
- $username = $args[3]
- $password = $args[4]
- $paramFile = $args[5]
- $fileName = $args[6]
+ param
+ (
+   [string]$source,
+   [string]$recycleApp,
+   [string]$computerName,
+   [string]$username,
+   [string]$password,
+   [string]$paramFile,
+   [string]$fileName
+ )
  
  $computerNameArgument = $computerName + '/MsDeploy.axd?site=' + $recycleApp
  
@@ -24,8 +27,11 @@
  "-allowUntrusted",
  "-enableRule:AppOffline",
  "-setParam:'IIS Web Application Name'='${recycleApp}'",
- "-setParamFile:${contentPath}\${paramFile}",
  "-enableRule:DoNotDeleteRule"
+
+ if ($paramFile){
+    $arguments += "-setParamFile:${contentPath}\${paramFile}"
+ }
  
   $fullCommand = """$msdeploy"" $arguments"
  Write-Host $fullCommand
