@@ -16,7 +16,7 @@ Place the following in your action `/.github/workflows/main.yml`
             server-username: ${{ secrets.USERNAME }}
             server-password: ${{ secrets.PASSWORD }}
             source-path: '_build'
-            source-paramFile: 'Umbraco.Web.SetParameters.xml'
+            source-fileName: Umbraco.Web.zip
 ```
 
 ---
@@ -55,7 +55,7 @@ You can find the access credentials for WebDeploy by accessing your `SolidCP acc
 ---
 
 # Common examples
-#### Build and publish .NET Core API
+#### Build and publish .NET Framework
 
 ```yml
 name: Build, publish and deploy project to UmbHost
@@ -103,6 +103,49 @@ jobs:
             server-username: ${{ secrets.USERNAME }}
             server-password: ${{ secrets.PASSWORD }}
             source-path: '_build'
-            source-paramFile: 'Umbraco.Web.SetParameters.xml'
+            source-fileName: Umbraco.Web.zip
 
+```
+
+#### Build and publish .NET Core / .NET 5.0+
+
+```yml
+
+name: Build, publish and deploy project to UmbHost
+
+on:
+  push:
+    branches: [ main ]
+env:
+    SolutionName: ${{ secrets.SOLUTION_NAME }}
+    BuildPlatform: Any CPU
+    BuildConfiguration: Release
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v3.0.0
+          with:
+            submodules: 'true'
+
+        - name: Create Build Directory
+          run: mkdir _build
+
+        - name: Build Solution
+          run: | 
+            dotnet build ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
+            
+        - name: Deploy to UmbHost
+          uses: UmbHost/umbhost-web-deploy@v1.0.1
+          with:
+            website-name: ${{ secrets.RELEASE_WEBSITE_NAME }}
+            server-computer-name: ${{ secrets.RELEASE_SERVER_COMPUTER_NAME }}
+            server-username: ${{ secrets.RELEASE_USERNAME }}
+            server-password: ${{ secrets.RELEASE_PASSWORD }}
+            source-path: '_build'
+            source-fileName: Umbraco.Web.zip
 ```
