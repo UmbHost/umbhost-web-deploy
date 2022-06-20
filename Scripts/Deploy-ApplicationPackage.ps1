@@ -1,7 +1,4 @@
-
- $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";
-
- param
+param
  (
    [string]$source,
    [string]$recycleApp,
@@ -11,7 +8,9 @@
    [string]$paramFile,
    [string]$fileName
  )
- 
+
+ $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";
+
  $computerNameArgument = $computerName + '/MsDeploy.axd?site=' + $recycleApp
  
  $directory = Split-Path -Path (Get-Location) -Parent
