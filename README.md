@@ -71,7 +71,7 @@ env:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: windows-latest
     
     steps:
         - name: Checkout
