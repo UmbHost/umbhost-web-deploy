@@ -50,6 +50,7 @@ You can find the access credentials for WebDeploy by accessing your `SolidCP acc
 | `server-username`       | Yes | `username`        | | Your UmbHost Web Publishing username |
 | `server-password`       | Yes | `password`        | | Your UmbHost Web Publishing password |
 | `source-fileName`       | Yes | `Umbraco.Web.zip`        | `Umbraco.Web.zip` | The location of the SetParameters.xml file |
+| `solution-name`       | Yes | `ExampleSolution`        |  | The name of the .NET solution containing the Umbraco project to be deployed |
 | `source-path`       | No | `_build`        | `_build`  | The source directory for payload |
 | `source-paramFile`       | No | `_build`        |  | The location of the SetParameters.xml file |
 ---
