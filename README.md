@@ -81,10 +81,8 @@ jobs:
         - name: Setup MSBuild
           uses: microsoft/setup-msbuild@v1
           
-        - name: Setup NuGet
-          uses: NuGet/setup-nuget@v1.0.5
-          with:
-            nuget-version: 5.5.0
+        - name: Setup NuGet.exe for use with actions
+          uses: NuGet/setup-nuget@v1.2.0
 
         - name: Create Build Directory
           run: mkdir _build
