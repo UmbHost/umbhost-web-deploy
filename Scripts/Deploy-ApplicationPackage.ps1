@@ -17,15 +17,15 @@ param
  $baseName = (Get-Item $directory).BaseName
  $contentPath = Join-Path(Join-Path $directory $baseName) $source
 
- $remoteArguments = "computerName='${computerNameArgument}',userName='${username}',password='${password}',authType='Basic',"
+ $remoteArguments = "computerName=`"${computerNameArgument}`",userName=`"${username}`",password=`"${password}`",authType=`"Basic`","
 
  [string[]] $arguments = 
  "-verb:sync",
  "-source:package=${contentPath}\${fileName}",
- "-dest:auto,$($remoteArguments)includeAcls='False'",
+ "-dest:auto,$($remoteArguments)includeAcls=`"False`"",
  "-allowUntrusted",
  "-enableRule:AppOffline",
- "-setParam:'IIS Web Application Name'='${recycleApp}'",
+ "-setParam:'IIS Web Application Name'=`"${recycleApp}`"",
  "-enableRule:DoNotDeleteRule"
 
  if ($paramFile){
