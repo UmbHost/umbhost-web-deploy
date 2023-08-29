@@ -33,30 +33,30 @@ runs:
       run: >
         ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
         -recycleMode StopAppPool
-        -recycleApp '${{ inputs.website-name }}'
-        -computerName '${{ inputs.server-computer-name }}'
-        -username '${{ inputs.server-username }}'
-        -password '${{ inputs.server-password }}'
+        -recycleApp ${{ inputs.website-name }}
+        -computerName ${{ inputs.server-computer-name }}
+        -username ${{ inputs.server-username }}
+        -password ${{ inputs.server-password }}
     - name: Deploy Application
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
-        -source '${{ inputs.source-path }}'
-        -recycleApp '${{ inputs.website-name }}'
-        -computerName '${{ inputs.server-computer-name }}'
-        -username '${{ inputs.server-username }}'
-        -password '${{ inputs.server-password }}'
-        -paramFile '${{ inputs.source-paramFile }}'
-        -fileName '${{ inputs.source-fileName }}'
+        -source ${{ inputs.source-path }}
+        -recycleApp ${{ inputs.website-name }}
+        -computerName ${{ inputs.server-computer-name }}
+        -username ${{ inputs.server-username }}
+        -password ${{ inputs.server-password }}
+        -paramFile ${{ inputs.source-paramFile }}
+        -fileName ${{ inputs.source-fileName }}
     - name: Start Application Pool
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
         -recycleMode StartAppPool
-        -recycleApp '${{ inputs.website-name }}'
-        -computerName '${{ inputs.server-computer-name }}'
-        -username '${{ inputs.server-username }}'
-        -password '${{ inputs.server-password }}'
+        -recycleApp ${{ inputs.website-name }}
+        -computerName ${{ inputs.server-computer-name }}
+        -username ${{ inputs.server-username }}
+        -password ${{ inputs.server-password }}
 branding:
   icon: 'server'
   color: 'blue'
