@@ -36,7 +36,7 @@ runs:
         -recycleApp ${{ inputs.website-name }}
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
-        -password ${{ inputs.server-password }}
+        -password "${{ inputs.server-password }}"
     - name: Deploy Application
       shell: pwsh
       run: >
@@ -45,7 +45,7 @@ runs:
         -recycleApp ${{ inputs.website-name }}
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
-        -password ${{ inputs.server-password }}
+        -password "${{ inputs.server-password }}"
         -paramFile ${{ inputs.source-paramFile }}
         -fileName ${{ inputs.source-fileName }}
     - name: Start Application Pool
@@ -56,7 +56,7 @@ runs:
         -recycleApp ${{ inputs.website-name }}
         -computerName ${{ inputs.server-computer-name }}
         -username ${{ inputs.server-username }}
-        -password ${{ inputs.server-password }}
+        -password "${{ inputs.server-password }}"
 branding:
   icon: 'server'
   color: 'blue'
