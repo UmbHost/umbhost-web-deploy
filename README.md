@@ -9,14 +9,14 @@ This action utilizes Microsoft’s own `Web Deploy 3.0+` executable, which you c
 Place the following in your action `/.github/workflows/main.yml`
 ```yml
       - name: Deploy to UmbHost
-        uses: UmbHost/umbhost-web-deploy@v1.0.3
-          with:
-            website-name: ${{ secrets.WEBSITE_NAME }}
-            server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-            server-username: ${{ secrets.USERNAME }}
-            server-password: ${{ secrets.PASSWORD }}
-            source-path: '_build'
-            source-fileName: Umbraco.Web.zip
+        uses: UmbHost/umbhost-web-deploy@v1.0.4
+        with:
+          website-name: ${{ secrets.WEBSITE_NAME }}
+          server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
+          server-username: ${{ secrets.USERNAME }}
+          server-password: ${{ secrets.PASSWORD }}
+          source-path: '_build'
+          source-fileName: Umbraco.Web.zip
 ```
 
 ---
@@ -49,10 +49,9 @@ You can find the access credentials for WebDeploy by accessing your `SolidCP acc
 | `server-computer-name`  | Yes | `https://webdeploy.umbhost.net:8172` or `https://webdeploy.us.umbhost.net:8172` | | Computer name, including the port|
 | `server-username`       | Yes | `username`        | | Your UmbHost Web Publishing username |
 | `server-password`       | Yes | `password`        | | Your UmbHost Web Publishing password |
-| `source-fileName`       | Yes | `Umbraco.Web.zip`        | `Umbraco.Web.zip` | The location of the SetParameters.xml file |
-| `solution-name`       | Yes | `ExampleSolution`        |  | The name of the .NET solution containing the Umbraco project to be deployed |
+| `source-fileName`       | Yes | `Umbraco.Web.zip`        | `Umbraco.Web.zip` | The name of the file to be deployed |
+| `source-paramFile`       | Yes | `SetParameters.xml`        | `""` | The location of the SetParameters.xml file |
 | `source-path`       | No | `_build`        | `_build`  | The source directory for payload |
-| `source-paramFile`       | No | `_build`        |  | The location of the SetParameters.xml file |
 ---
 
 # Common examples
@@ -95,7 +94,7 @@ jobs:
             msbuild.exe ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
             
         - name: Deploy to UmbHost
-          uses: UmbHost/umbhost-web-deploy@v1.0.3
+          uses: UmbHost/umbhost-web-deploy@v1.0.4
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
@@ -137,7 +136,7 @@ jobs:
             dotnet build ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
             
         - name: Deploy to UmbHost
-          uses: UmbHost/umbhost-web-deploy@v1.0.3
+          uses: UmbHost/umbhost-web-deploy@v1.0.4
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
