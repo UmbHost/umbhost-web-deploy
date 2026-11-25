@@ -9,7 +9,6 @@ $arguments = @(
     '-verb:sync'
     "-source:package=$(Format-MsDeployValue 'source-fileName' $files.Package)"
     "-dest:auto,$($destination.Connection),includeAcls=`"False`""
-    '-allowUntrusted'
     '-enableRule:AppOffline'
     "-setParam:'IIS Web Application Name'=$($destination.Site)"
     '-enableRule:DoNotDeleteRule'

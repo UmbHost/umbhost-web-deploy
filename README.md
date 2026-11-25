@@ -9,7 +9,7 @@ This action utilizes Microsoft’s own `Web Deploy 3.0+` executable, which you c
 Place the following in your action `/.github/workflows/main.yml`
 ```yml
       - name: Deploy to UmbHost
-        uses: UmbHost/umbhost-web-deploy@v1.0.4
+        uses: UmbHost/umbhost-web-deploy@v2.0.0
         with:
           website-name: ${{ secrets.WEBSITE_NAME }}
           server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
@@ -52,6 +52,13 @@ You can find the access credentials for WebDeploy by accessing your `SolidCP acc
 | `source-fileName`       | Yes | `Umbraco.Web.zip`        | `Umbraco.Web.zip` | The name of the file to be deployed |
 | `source-paramFile`       | Yes | `SetParameters.xml`        | `""` | The location of the SetParameters.xml file |
 | `source-path`       | No | `_build`        | `_build`  | The source directory for payload |
+### Upgrading from v1
+v2 checks the server's certificate, so `server-computer-name` must be:
+- `https`, and
+- the server's own `webdeploy` name, exactly as in your publishing profile, for example `https://webdeploy.umbhost.net:8172`.
+
+An IP address or any other name will be refused, because the certificate does not cover it. Nothing else changes.
+
 ### If a deployment fails
 The site's application pool is stopped before deploying, and started again once the deployment succeeds. If the deployment does not finish, the site stays stopped, because it could be a mix of old and new files. Re-run the deployment.
 
@@ -101,7 +108,7 @@ jobs:
             msbuild.exe ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
             
         - name: Deploy to UmbHost
-          uses: UmbHost/umbhost-web-deploy@v1.0.4
+          uses: UmbHost/umbhost-web-deploy@v2.0.0
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
@@ -143,7 +150,7 @@ jobs:
             dotnet build ${{env.SolutionName}} /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:DeleteExistingFiles=True /p:SkipInvalidConfigurations=true /p:IncludeSetAclProviderOnDestination=False /p:AutoParameterizationWebConfigConnectionStrings=False /p:platform="${{env.BuildPlatform}}" /p:configuration="${{env.BuildConfiguration}}" /p:PackageLocation="../_build"
             
         - name: Deploy to UmbHost
-          uses: UmbHost/umbhost-web-deploy@v1.0.4
+          uses: UmbHost/umbhost-web-deploy@v2.0.0
           with:
             website-name: ${{ secrets.WEBSITE_NAME }}
             server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}

@@ -10,7 +10,6 @@ $ErrorActionPreference = 'Stop'
 $destination = Get-MsDeployDestination
 $exitCode = Invoke-MsDeploy @(
     '-verb:sync'
-    '-allowUntrusted'
     '-source:recycleApp'
     "-dest:recycleApp=$($destination.Site),recycleMode=$recycleMode,$($destination.Connection)"
 )

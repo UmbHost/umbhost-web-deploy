@@ -9,6 +9,9 @@ function Format-MsDeployValue([string]$name, [string]$value) {
 }
 
 function Get-MsDeployDestination {
+    # Web Deploy checks the server's certificate, and only https has one.
+    if ("$env:WEB_DEPLOY_COMPUTER" -notmatch '^https://') { throw 'server-computer-name must start with https://.' }
+
     $site = Format-MsDeployValue 'website-name' $env:WEB_DEPLOY_SITE
     $computer = Format-MsDeployValue 'server-computer-name' ($env:WEB_DEPLOY_COMPUTER + '/MsDeploy.axd?site=' + $env:WEB_DEPLOY_SITE)
     $user = Format-MsDeployValue 'server-username' $env:WEB_DEPLOY_USERNAME
