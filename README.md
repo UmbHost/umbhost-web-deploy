@@ -52,6 +52,13 @@ You can find the access credentials for WebDeploy by accessing your `SolidCP acc
 | `source-fileName`       | Yes | `Umbraco.Web.zip`        | `Umbraco.Web.zip` | The name of the file to be deployed |
 | `source-paramFile`       | Yes | `SetParameters.xml`        | `""` | The location of the SetParameters.xml file |
 | `source-path`       | No | `_build`        | `_build`  | The source directory for payload |
+### If a deployment fails
+The site's application pool is stopped before deploying, and started again once the deployment succeeds. If the deployment does not finish, the site stays stopped, because it could be a mix of old and new files. Re-run the deployment.
+
+To go back to the previous version, re-run the workflow of the last commit that worked.
+
+The website name, username and password cannot contain a single or double quote.
+
 ---
 
 # Common examples
