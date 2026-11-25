@@ -28,35 +28,47 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # Inputs travel as environment variables, so nothing in one is read as code.
+    - name: Check Deployment Files
+      shell: pwsh
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        WEB_DEPLOY_SOURCE: ${{ inputs.source-path }}
+        WEB_DEPLOY_PACKAGE: ${{ inputs.source-fileName }}
+        WEB_DEPLOY_PARAMETERS: ${{ inputs.source-paramFile }}
+      run: |
+        . (Join-Path $env:ACTION_PATH 'Scripts/DeploymentFiles.ps1')
+        $null = Get-DeploymentFiles
     - name: Stop Application Pool
       shell: pwsh
-      run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
-        -recycleMode StopAppPool
-        -recycleApp ${{ inputs.website-name }}
-        -computerName ${{ inputs.server-computer-name }}
-        -username ${{ inputs.server-username }}
-        -password "${{ inputs.server-password }}"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        WEB_DEPLOY_SITE: ${{ inputs.website-name }}
+        WEB_DEPLOY_COMPUTER: ${{ inputs.server-computer-name }}
+        WEB_DEPLOY_USERNAME: ${{ inputs.server-username }}
+        WEB_DEPLOY_PASSWORD: ${{ inputs.server-password }}
+      run: '& (Join-Path $env:ACTION_PATH "Scripts/Set-ApplicationPool.ps1") -recycleMode StopAppPool'
     - name: Deploy Application
       shell: pwsh
-      run: >
-        ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
-        -source ${{ inputs.source-path }}
-        -recycleApp ${{ inputs.website-name }}
-        -computerName ${{ inputs.server-computer-name }}
-        -username ${{ inputs.server-username }}
-        -password "${{ inputs.server-password }}"
-        -paramFile ${{ inputs.source-paramFile }}
-        -fileName ${{ inputs.source-fileName }}
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        WEB_DEPLOY_SITE: ${{ inputs.website-name }}
+        WEB_DEPLOY_COMPUTER: ${{ inputs.server-computer-name }}
+        WEB_DEPLOY_USERNAME: ${{ inputs.server-username }}
+        WEB_DEPLOY_PASSWORD: ${{ inputs.server-password }}
+        WEB_DEPLOY_SOURCE: ${{ inputs.source-path }}
+        WEB_DEPLOY_PACKAGE: ${{ inputs.source-fileName }}
+        WEB_DEPLOY_PARAMETERS: ${{ inputs.source-paramFile }}
+      run: '& (Join-Path $env:ACTION_PATH "Scripts/Deploy-ApplicationPackage.ps1")'
     - name: Start Application Pool
       shell: pwsh
-      run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
-        -recycleMode StartAppPool
-        -recycleApp ${{ inputs.website-name }}
-        -computerName ${{ inputs.server-computer-name }}
-        -username ${{ inputs.server-username }}
-        -password "${{ inputs.server-password }}"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+        WEB_DEPLOY_SITE: ${{ inputs.website-name }}
+        WEB_DEPLOY_COMPUTER: ${{ inputs.server-computer-name }}
+        WEB_DEPLOY_USERNAME: ${{ inputs.server-username }}
+        WEB_DEPLOY_PASSWORD: ${{ inputs.server-password }}
+      run: '& (Join-Path $env:ACTION_PATH "Scripts/Set-ApplicationPool.ps1") -recycleMode StartAppPool'
 branding:
   icon: 'server'
   color: 'blue'

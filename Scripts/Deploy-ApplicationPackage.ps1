@@ -1,41 +1,28 @@
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'password', Justification = 'msdeploy requires the password as plaintext in its -dest: argument; it arrives from a GitHub Actions masked secret and is passed straight through.')]
-param
- (
-   [string]$source,
-   [string]$recycleApp,
-   [string]$computerName,
-   [string]$username,
-   [string]$password,
-   [string]$paramFile,
-   [string]$fileName
- )
+$ErrorActionPreference = 'Stop'
+. (Join-Path $PSScriptRoot 'MsDeploy.ps1')
+. (Join-Path $PSScriptRoot 'DeploymentFiles.ps1')
 
- $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";
+$files = Get-DeploymentFiles
+$destination = Get-MsDeployDestination
 
- $computerNameArgument = $computerName + '/MsDeploy.axd?site=' + $recycleApp
+$arguments = @(
+    '-verb:sync'
+    "-source:package=$(Format-MsDeployValue 'source-fileName' $files.Package)"
+    "-dest:auto,$($destination.Connection),includeAcls=`"False`""
+    '-allowUntrusted'
+    '-enableRule:AppOffline'
+    "-setParam:'IIS Web Application Name'=$($destination.Site)"
+    '-enableRule:DoNotDeleteRule'
+)
+if ($files.Parameters) { $arguments += "-setParamFile:$(Format-MsDeployValue 'source-paramFile' $files.Parameters)" }
 
- $directory = Split-Path -Path (Get-Location) -Parent
- $baseName = (Get-Item $directory).BaseName
- $contentPath = Join-Path(Join-Path $directory $baseName) $source
+# Safe to repeat: only what still differs is copied.
+$attempts = 3
+for ($attempt = 1; $attempt -le $attempts; $attempt++) {
+    $exitCode = Invoke-MsDeploy $arguments
+    if ($exitCode -eq 0) { return }
+    Write-Host "Attempt $attempt of $attempts failed with exit code $exitCode."
+    if ($attempt -lt $attempts) { Start-Sleep -Seconds 10 }
+}
 
- $remoteArguments = "computerName=`"${computerNameArgument}`",userName=`"${username}`",password=`"${password}`",authType=`"Basic`","
-
- [string[]] $arguments =
- "-verb:sync",
- "-source:package=${contentPath}\${fileName}",
- "-dest:auto,$($remoteArguments)includeAcls=`"False`"",
- "-allowUntrusted",
- "-enableRule:AppOffline",
- "-setParam:'IIS Web Application Name'=`"${recycleApp}`"",
- "-enableRule:DoNotDeleteRule"
-
- if ($paramFile){
-    $arguments += "-setParamFile:${contentPath}\${paramFile}"
- }
-
-  $fullCommand = """$msdeploy"" $arguments"
- Write-Output $fullCommand
-
- $result = cmd.exe /c "$fullCommand"
-
- Write-Output $result
+throw 'Deployment incomplete, so the site has been stopped to avoid running a mix of old and new files. Re-run the deployment.'
